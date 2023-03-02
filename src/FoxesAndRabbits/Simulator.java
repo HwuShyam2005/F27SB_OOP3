@@ -21,9 +21,11 @@ public class Simulator
     // The default depth of the grid.
     private static final int DEFAULT_DEPTH = 80;
     // The probability that a fox will be created in any given grid position.
-    private static final double FOX_CREATION_PROBABILITY = 0.02;
+    private static final double FOX_CREATION_PROBABILITY = 0.06;
     // The probability that a rabbit will be created in any given grid position.
-    private static final double RABBIT_CREATION_PROBABILITY = 0.08;    
+    private static final double RABBIT_CREATION_PROBABILITY = 0.08; 
+ // The probability that a rabbit will be created in any given grid position.
+    private static final double EAGLE_CREATION_PROBABILITY = 0.09; 
 
     // List of animals in the field.
     private List<Animal> animals;
@@ -61,9 +63,9 @@ public class Simulator
 
         // Create a view of the state of each location in the field.
         view = new SimulatorView(depth, width);
-        view.setColor(Rabbit.class, Color.ORANGE);
+        view.setColor(Rabbit.class, Color.GREEN);
         view.setColor(Fox.class, Color.BLUE);
-        
+        view.setColor(Eagle.class, Color.RED);
         // Setup a valid starting point.
         reset();
     }
@@ -122,7 +124,7 @@ public class Simulator
     {
         step = 0;
         animals.clear();
-        populate();
+        PopulationGenerator.populate(field,animals);
         
         // Show the starting state in the view.
         view.showStatus(step, field);
@@ -142,13 +144,22 @@ public class Simulator
                     Fox fox = new Fox(true, field, location);
                     animals.add(fox);
                 }
+                else if(rand.nextDouble() <= EAGLE_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Eagle Eagle = new Eagle(true, field, location);
+                    animals.add(Eagle);
+                }
+                	
                 else if(rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
                     Location location = new Location(row, col);
                     Rabbit rabbit = new Rabbit(true, field, location);
                     animals.add(rabbit);
                 }
-                // else leave the location empty.
+              
+                
             }
         }
     }
 }
+
+
